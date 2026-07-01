@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — Citadel Shield</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="admin-main">
+    <nav class="admin-nav">
+      <span>citadel-shield // admin</span>
+      <a href="{{ url_for('admin_logout') }}">logout</a>
+    </nav>
+    <section class="status-block">
+      <div class="status-line">
+        <span class="dot dot-active"></span>
+        <span class="service-name">Authenticated</span>
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.75rem;">
+        Admin area online. <a href="/admin/devices">Manage nodes</a> · <a href="/admin/dns">DNS config</a> · <a href="/admin/devices">Devices</a> · <a href="/admin/keys">Generate keys</a> · <a href="/admin/audit">Audit log</a>
+      </p>
+    </section>
+  </main>
+</body>
+</html>

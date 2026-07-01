@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Citadel Shield</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main class="admin-main">
+    <div class="login-box">
+      <div class="login-header">
+        <span class="dot dot-active"></span>
+        <span>citadel-shield // admin</span>
+      </div>
+      {% if error %}<div class="login-error">{{ error }}</div>{% endif %}
+      <form method="POST" class="login-form">
+        <label for="password">$ password:</label>
+        <input type="password" id="password" name="password" autofocus autocomplete="current-password">
+        <button type="submit">authenticate</button>
+      </form>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Access{% endblock %}
+{% block content %}
+<div class="admin-main">
+  <div class="login-box">
+    <div class="login-header"><span style="color:var(--error);">⬡</span> Master access</div>
+    {% if error %}<div class="login-error">{{ error }}</div>{% endif %}
+    <form method="POST" class="login-form">
+      <label for="password">Passphrase:</label>
+      <input type="password" id="password" name="password" autofocus>
+      <button type="submit">Authenticate</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

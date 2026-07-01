@@ -1,0 +1,27 @@
+services:
+  headscale:
+    image: headscale/headscale:latest
+    container_name: headscale
+    command: serve
+    volumes:
+      - ./config:/etc/headscale
+      - ./data:/var/lib/headscale
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    restart: unless-stopped
+
+  citadel-web:
+    build: .
+    container_name: citadel-web
+    ports:
+      - "5050:5000"
+    volumes:
+      - .:/app
+      - ./config:/etc/citadel-config
+      - ./db-data:/data
+    environment:
+      - HEADSCALE_API_KEY=${HEADSCALE_API_KEY}
+    depends_on:
+      - headscale
+    restart: unless-stopped

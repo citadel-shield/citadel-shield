@@ -1,0 +1,28 @@
+# Environment & secrets
+.env
+*.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Database
+*.db
+*.sqlite
+
+# Data files (runtime, not source)
+/data/
+audit.log
+peers.json
+wg_sync.json
+stats.json
+server_public.key
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

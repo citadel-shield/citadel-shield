@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Sign Up — Citadel Shield{% endblock %}
+{% block content %}
+<div class="auth-container">
+  <div class="auth-box">
+    <h1>Create Account</h1>
+    {% if error %}<div class="login-error">{{ error }}</div>{% endif %}
+    
+    <form method="POST" class="login-form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="min 8 characters" required>
+      
+      <button type="submit">Sign up</button>
+    </form>
+    
+    <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-top:1rem;">
+      Already have an account? <a href="/dashboard" style="color:var(--accent);">Log in</a>
+    </p>
+  </div>
+</div>
+{% endblock %}

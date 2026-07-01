@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}About — Citadel Shield{% endblock %}
+{% block content %}
+    <section class="policy-block">
+      <pre class="policy-code">
+# operator.policy
+identity:       anonymous
+motive:         autonomy
+dependencies:   minimal
+telemetry:      none
+status:         production</pre>
+    </section>
+
+    <section class="prose">
+      <h1>WHY THIS EXISTS</h1>
+
+      <p>Earlier this year, someone got into one of my accounts. Not through anything sophisticated — just the kind of breach that happens when you trust the defaults and assume someone else is watching the perimeter. They were. Just not for me.</p>
+
+      <p>That was the moment the abstraction broke. I started looking at every service connecting my devices — coordination servers I didn't run, DNS resolvers I didn't choose, relay infrastructure I couldn't inspect — and realized I'd handed the keys to my own network to companies whose incentives had nothing to do with mine.</p>
+
+      <p>So I decided to build the thing myself. Not fork it. Not configure someone else's template. Build it.</p>
+
+      <h1>WHAT THAT ACTUALLY LOOKED LIKE</h1>
+
+      <p>I'm a cybersecurity student. When I started this, I had never provisioned a server, never written a Dockerfile, never configured a reverse proxy, never set up DNS records, never deployed anything to production. Every single piece of this stack was learned by doing it wrong first.</p>
+
+      <p>The coordination server crash-looped for hours because I didn't know the entrypoint was already the binary name. The config schema had changed between versions and every example online was outdated. Port 5000 was silently taken by macOS. The VPN client on Mac requires a specific configuration path through the GUI app. Cloudflare's SSL modes will 521 your site if you pick the wrong one. The server's firewall almost locked me out of SSH. I committed an API key to a public repo and had to rotate it in real time.</p>
+
+      <p>Every one of those is documented in the <a href="/notes" style="color:var(--accent);">field notes</a> — not as a tutorial, but because I know what it feels like to hit an error at 3 AM with no search results that match.</p>
+
+      <h1>WHAT EXISTS NOW</h1>
+
+      <p>A self-hosted VPN coordination server running on infrastructure I own. Two devices connected across an encrypted mesh — a MacBook and an Android phone, different operating systems, talking through WireGuard tunnels coordinated by a server I deployed, hardened, and manage through a web panel I wrote.</p>
+
+      <p>A production website with HTTPS, a custom domain, auto-deploy from GitHub, a firewall that only opens what it needs to, SSH keys instead of passwords, and an audit log that tracks every administrative action.</p>
+
+      <p>A real admin panel — not a dashboard skin over someone else's API, but actual routes that talk to the coordination server's API, generate pre-auth keys, edit DNS config, and revoke nodes. Protected by a login wall with hashed credentials that never touch plaintext.</p>
+
+      <p>All of it built from a MacBook Air, across long nights, by someone who had to learn what a reverse proxy was before configuring one.</p>
+
+      <h1>THE POINT</h1>
+
+      <p>This isn't a startup. It's not a product pitch. It's proof that you can own your own infrastructure if you're willing to sit with the errors long enough to understand them.</p>
+
+      <p>The coordination plane that connects my devices answers to me. The DNS settings are ones I chose. The access control policy is one I wrote. The server is one I hardened. And every bug I hit along the way is documented so the next person who sees the same error string at 3 AM finds an answer instead of silence.</p>
+
+      <p>That's why this exists.</p>
+    </section>
+{% endblock %}

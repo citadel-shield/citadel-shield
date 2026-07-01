@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Generate key — Admin{% endblock %}
+{% block content %}
+<div class="admin-main admin-page">
+  <nav class="admin-nav">
+    <span>citadel-shield // admin // keys</span>
+    <a href="{{ url_for('admin_logout') }}">logout</a>
+  </nav>
+
+  {% if error %}
+  <div class="login-error" style="max-width:500px;">{{ error }}</div>
+  {% endif %}
+
+  {% if key %}
+  <div style="max-width:500px; width:100%; background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.2); border-radius:var(--radius-lg); padding:1.25rem 1.5rem;">
+    <div style="font-size:0.8rem; color:var(--success); font-weight:600; margin-bottom:0.5rem;">KEY GENERATED — COPY NOW (shown only once)</div>
+    <code style="display:block; background:rgba(0,0,0,0.3); padding:0.75rem 1rem; border-radius:var(--radius); font-size:0.8rem; word-break:break-all; color:var(--text); user-select:all;">{{ key }}</code>
+    <p style="font-size:0.8rem; color:var(--text-muted); margin-top:0.75rem;">Use this key with: <code style="font-size:0.75rem;">citadel-connect --server=https://citadel-shield.com --key=THIS_KEY</code></p>
+  </div>
+  {% endif %}
+
+  <div class="card" style="max-width:500px; width:100%;">
+    <div style="font-size:0.75rem; font-weight:600; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:1rem; text-transform:uppercase;">Generate pre-auth key</div>
+    <form method="POST" style="display:flex; flex-direction:column; gap:1rem;">
+      <div>
+        <label class="dns-label" for="user_id">User ID</label>
+        <input type="text" id="user_id" name="user_id" value="1" class="dns-input" style="max-width:120px;">
+        <span style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem; display:block;">Numeric user ID from the admin panel</span>
+      </div>
+      <div>
+        <label class="dns-label" for="expiration">Expires in (hours)</label>
+        <input type="number" id="expiration" name="expiration" value="24" min="1" max="8760" class="dns-input" style="max-width:120px;">
+      </div>
+      <div>
+        <label style="font-size:0.88rem; color:var(--text); cursor:pointer; display:flex; align-items:center; gap:0.5rem;">
+          <input type="checkbox" name="reusable" checked>
+          Reusable (multiple devices can use this key)
+        </label>
+      </div>
+      <button type="submit" class="btn-primary" style="align-self:flex-start;">Generate key</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

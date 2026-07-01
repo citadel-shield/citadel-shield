@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Pricing — Citadel Shield{% endblock %}
+{% block content %}
+<div class="pricing-container">
+  <h1>Choose Your Plan</h1>
+  <p class="pricing-intro">Self-hosted VPN coordination. Your way.</p>
+  
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <h2>Free</h2>
+      <p class="price">/bin/zsh<span> one-time</span></p>
+      <ul class="features">
+        <li>✓ Self-hosted (Docker)</li>
+        <li>✓ Full source code</li>
+        <li>✓ Community support</li>
+        <li>✗ No managed hosting</li>
+      </ul>
+      <a href="https://github.com/citadel-shield/citadel-shield" class="btn btn-secondary">Download</a>
+    </div>
+    
+    <div class="pricing-card featured">
+      <span class="badge">Popular</span>
+      <h2>Pro</h2>
+      <p class="price"><span> one-time</span></p>
+      <ul class="features">
+        <li>✓ Managed hosting</li>
+        <li>✓ 24/7 uptime</li>
+        <li>✓ Automatic updates</li>
+        <li>✓ Email support</li>
+      </ul>
+      <a href="/checkout" class="btn btn-primary">Get Started</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

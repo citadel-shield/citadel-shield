@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Devices — Admin{% endblock %}
+{% block content %}
+<div class="admin-main admin-page">
+  <nav class="admin-nav">
+    <span>citadel-shield // admin // devices</span>
+    <a href="{{ url_for('admin_logout') }}">logout</a>
+  </nav>
+
+  <div style="max-width:700px; width:100%;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+      <div style="font-size:0.75rem; font-weight:600; letter-spacing:0.1em; color:var(--text-muted); text-transform:uppercase;">Connected devices</div>
+      <a href="{{ url_for('admin_add_device') }}" class="btn-primary" style="font-size:0.85rem; text-decoration:none;">+ Add device</a>
+    </div>
+
+    {% if peers %}
+    <div style="display:flex; flex-direction:column; gap:0.75rem;">
+      {% for peer in peers %}
+      <div class="card" style="padding:1rem 1.25rem; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:600;">{{ peer.name }}</div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">{{ peer.ip }} · {{ peer.public_key[:16] }}...</div>
+        </div>
+        <form method="POST" action="{{ url_for('admin_remove_device', pubkey=peer.public_key) }}"
+              onsubmit="return confirm('Remove {{ peer.name }}? They will lose VPN access.');">
+          <button type="submit" style="background:transparent; border:1px solid rgba(248,113,113,0.3); color:var(--error); font-size:0.8rem; padding:0.35rem 0.75rem; border-radius:var(--radius); cursor:pointer;">Remove</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card"><p style="color:var(--text-muted);">No devices yet. Click "Add device" to generate a config.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

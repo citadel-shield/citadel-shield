@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}How-To — Citadel Shield{% endblock %}
+{% block content %}
+    <section class="howto">
+      <h1>HOW-TO</h1>
+      <p class="notes-intro">Deploying your own coordination plane, start to finish. The config schema has changed between versions — check against the official docs if a step here doesn't match.</p>
+      <ol class="howto-steps">
+        {% for step in steps %}
+        <li class="howto-step">
+          <div class="step-header">
+            <span class="step-num">{{ step.num }}</span>
+            <span class="step-title">{{ step.title }}</span>
+          </div>
+          <p class="step-body">{{ step.body }}</p>
+          <pre class="step-code">{{ step.code }}</pre>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+{% endblock %}

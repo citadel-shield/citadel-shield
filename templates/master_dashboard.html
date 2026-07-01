@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Master{% endblock %}
+{% block content %}
+<div class="page-container" style="max-width:800px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+    <h1 style="font-size:1.25rem; margin:0;">Master panel</h1>
+    <a href="{{ url_for('master_logout') }}" style="color:var(--text-muted); font-size:0.85rem;">Sign out</a>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem;">
+    <div class="card" style="text-align:center; padding:1.5rem;">
+      <div style="font-size:2rem; font-weight:700; color:var(--accent);">{{ stats.total_visits or 0 }}</div>
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">Total visits</div>
+    </div>
+    <div class="card" style="text-align:center; padding:1.5rem;">
+      <div style="font-size:2rem; font-weight:700; color:var(--success);">{{ user_count }}</div>
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">Registered users</div>
+    </div>
+    <div class="card" style="text-align:center; padding:1.5rem;">
+      <div style="font-size:2rem; font-weight:700; color:var(--warning);">{{ paid_count }}</div>
+      <div style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">Paid users</div>
+    </div>
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:1rem;">
+    <a href="{{ url_for('master_users') }}" class="card" style="text-decoration:none; color:inherit; padding:1.25rem;">
+      <h3 style="margin-bottom:0.35rem;">User management</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">View signups, toggle subscriptions, remove accounts.</p>
+      <span style="font-size:0.8rem; color:var(--accent); font-weight:600;">Open →</span>
+    </a>
+    <a href="{{ url_for('master_stats') }}" class="card" style="text-decoration:none; color:inherit; padding:1.25rem;">
+      <h3 style="margin-bottom:0.35rem;">Site analytics</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">Page visits by day, most viewed pages, traffic trends.</p>
+      <span style="font-size:0.8rem; color:var(--accent); font-weight:600;">Open →</span>
+    </a>
+    <a href="{{ url_for('admin_devices') }}" class="card" style="text-decoration:none; color:inherit; padding:1.25rem;">
+      <h3 style="margin-bottom:0.35rem;">Device management</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">Add or remove WireGuard devices, generate configs.</p>
+      <span style="font-size:0.8rem; color:var(--accent); font-weight:600;">Open →</span>
+    </a>
+    <a href="{{ url_for('admin_audit') }}" class="card" style="text-decoration:none; color:inherit; padding:1.25rem;">
+      <h3 style="margin-bottom:0.35rem;">Audit log</h3>
+      <p style="font-size:0.85rem; color:var(--text-secondary);">Every admin action with timestamps and IPs.</p>
+      <span style="font-size:0.8rem; color:var(--accent); font-weight:600;">Open →</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

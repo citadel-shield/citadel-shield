@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Analytics — Master{% endblock %}
+{% block content %}
+<div class="page-container" style="max-width:800px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <h1 style="font-size:1.25rem; margin:0;">Site analytics</h1>
+    <a href="{{ url_for('master_dashboard') }}" style="color:var(--text-muted); font-size:0.85rem;">← Back</a>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem; padding:1.25rem;">
+    <div style="font-size:0.75rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; margin-bottom:1rem;">Total visits: {{ stats.total_visits or 0 }}</div>
+
+    {% for date in stats.get('visits', {})|sort(reverse=true) %}
+    <div style="margin-bottom:1rem;">
+      <div style="font-weight:600; font-size:0.9rem; margin-bottom:0.5rem; color:var(--text);">{{ date }}</div>
+      {% for path, count in stats.visits[date]|dictsort(by='value', reverse=true) %}
+      <div style="display:flex; justify-content:space-between; padding:0.2rem 0; font-size:0.82rem;">
+        <span style="color:var(--text-secondary);">{{ path }}</span>
+        <span style="color:var(--text-muted); font-family:var(--mono, monospace);">{{ count }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:var(--text-muted);">No visit data yet. Stats begin tracking now.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

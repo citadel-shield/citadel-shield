@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Audit Log — Admin{% endblock %}
+{% block content %}
+<div class="admin-main admin-page">
+  <nav class="admin-nav">
+    <span>citadel-shield // admin // audit</span>
+    <a href="{{ url_for('admin_logout') }}">logout</a>
+  </nav>
+
+  <div style="max-width:800px; width:100%;">
+    <div style="font-size:0.75rem; font-weight:600; letter-spacing:0.1em; color:var(--text-muted); margin-bottom:1rem; text-transform:uppercase;">Audit Log</div>
+
+    {% if entries %}
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      {% for entry in entries %}
+      <div class="card" style="padding:1rem 1.25rem;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <div>
+            <span style="font-weight:600; font-size:0.9rem;">{{ entry.action }}</span>
+            {% if entry.details %}
+            <span style="color:var(--text-muted); font-size:0.85rem;"> — {{ entry.details }}</span>
+            {% endif %}
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted); white-space:nowrap;">
+            {{ entry.timestamp[:19] | replace('T', ' ') }} UTC
+            {% if entry.ip %} · {{ entry.ip }}{% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="card"><p style="color:var(--text-muted);">No events logged yet.</p></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

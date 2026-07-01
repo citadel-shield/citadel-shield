@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Citadel Shield{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav">
+      <a href="/" class="nav-brand">
+        <img src="/static/img/logo.svg" alt="Citadel Shield" width="28" height="28">
+        Citadel Shield
+      </a>
+      <div class="nav-links">
+        <a href="/about" {% if active_page == 'about' %}class="active"{% endif %}>About</a>
+        <a href="/notes" {% if active_page == 'notes' %}class="active"{% endif %}>Docs</a>
+        <a href="/how-to" {% if active_page == 'howto' %}class="active"{% endif %}>Deploy</a>
+        <a href="/changelog" {% if active_page == "changelog" %}class="active"{% endif %}>Changelog</a>
+      <a href="/tools" {% if active_page == 'tools' %}class="active"{% endif %}>Tools</a>
+        <a href="https://github.com/citadel-shield/citadel-shield" target="_blank">GitHub</a>
+      </div>
+      <div class="nav-actions">
+        <a href="/login" class="btn-ghost">Log in</a>
+        <a href="/signup" class="btn-primary">Get started</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <a href="/" class="footer-brand">
+        Citadel Shield
+      </a>
+      <div class="footer-links">
+        <a href="/about">About</a>
+        <a href="/notes">Docs</a>
+        <a href="/how-to">Deploy</a>
+        <a href="https://github.com/citadel-shield/citadel-shield">GitHub</a>
+        <a href="mailto:contact@citadel-shield.com">Contact</a>
+      </div>
+      <span class="footer-copy">© 2026 Citadel Shield</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Field Notes — Citadel Shield{% endblock %}
+{% block content %}
+    <section class="notes">
+      <h1>FIELD NOTES</h1>
+      <p class="notes-intro">Real errors hit building this, written up in case the same string lands in someone else's search results.</p>
+      <div class="notes-list">
+        {% for note in field_notes %}
+        <article class="note">
+          <div class="note-header">
+            <span class="note-id">NOTE #{{ "%02d"|format(loop.index) }}</span>
+            <span class="note-title">{{ note.title }}</span>
+          </div>
+          <pre class="note-symptom">{{ note.symptom }}</pre>
+          <div class="note-field"><span class="label">CAUSE</span>{{ note.cause }}</div>
+          <div class="note-field"><span class="label">FIX</span>{{ note.fix }}</div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+{% endblock %}

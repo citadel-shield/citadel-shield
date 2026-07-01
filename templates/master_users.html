@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Users — Master{% endblock %}
+{% block content %}
+<div class="page-container" style="max-width:800px;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+    <h1 style="font-size:1.25rem; margin:0;">Users ({{ users|length }})</h1>
+    <a href="{{ url_for('master_dashboard') }}" style="color:var(--text-muted); font-size:0.85rem;">← Back</a>
+  </div>
+
+  {% for user in users %}
+  <div class="card" style="padding:1rem 1.25rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <div>
+      <div style="font-weight:600;">{{ user.email }}</div>
+      <div style="font-size:0.8rem; color:var(--text-muted);">
+        ID: {{ user.id }} · Joined: {{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'unknown' }}
+        {% if user.subscription_active %}
+        · <span style="color:var(--success);">Pro</span>
+        {% else %}
+        · <span style="color:var(--text-muted);">Free</span>
+        {% endif %}
+      </div>
+    </div>
+    <div style="display:flex; gap:0.5rem;">
+      <form method="POST" action="{{ url_for('master_toggle_user', uid=user.id) }}">
+        <button type="submit" style="background:transparent; border:1px solid var(--border); color:var(--accent); font-size:0.8rem; padding:0.3rem 0.7rem; border-radius:var(--radius); cursor:pointer;">
+          {% if user.subscription_active %}Downgrade{% else %}Upgrade{% endif %}
+        </button>
+      </form>
+      <form method="POST" action="{{ url_for('master_delete_user', uid=user.id) }}" onsubmit="return confirm('Permanently delete {{ user.email }}?');">
+        <button type="submit" style="background:transparent; border:1px solid rgba(248,113,113,0.3); color:var(--error); font-size:0.8rem; padding:0.3rem 0.7rem; border-radius:var(--radius); cursor:pointer;">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="card"><p style="color:var(--text-muted);">No users yet.</p></div>
+  {% endfor %}
+</div>
+{% endblock %}
