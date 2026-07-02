@@ -11,42 +11,11 @@
     </div>
   </div>
 
-  {% if request.args.get('upgraded') %}
-  <div style="background:var(--green-subtle);border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-lg);padding:1rem 1.5rem;margin-bottom:1.25rem;color:var(--green-hover);font-size:0.9rem;">
-    ✓ Subscription activated — welcome to Pro.
-  </div>
-  {% endif %}
-
-  <!-- SUBSCRIPTION -->
-  <div class="dashboard-section">
-    <h2>YOUR SUBSCRIPTION</h2>
-    {% if user.subscription_active %}
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-      <div style="display:flex;align-items:center;gap:0.75rem;">
-        <span style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--green-subtle);color:var(--green-hover);font-size:0.8rem;font-weight:700;padding:0.3rem 0.85rem;border-radius:20px;border:1px solid rgba(16,185,129,0.25);">● PRO</span>
-        <span style="font-size:0.9rem;color:var(--text-secondary);">Lifetime access</span>
-      </div>
-      <form action="/cancel-plan" method="POST">
-        <button type="submit" class="btn-secondary" style="font-size:0.82rem;padding:0.4rem 0.9rem;color:var(--error);border-color:rgba(248,113,113,0.3);" onclick="return confirm('Deactivate your Pro access?')">Deactivate</button>
-      </form>
-    </div>
-    {% else %}
-    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
-      <div>
-        <span style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface-2);color:var(--text-muted);font-size:0.8rem;font-weight:700;padding:0.3rem 0.85rem;border-radius:20px;border:1px solid var(--border);">FREE</span>
-        <span style="font-size:0.88rem;color:var(--text-muted);margin-left:0.75rem;">Managed hosting not active</span>
-      </div>
-      <a href="/checkout" class="btn-primary" style="font-size:0.88rem; text-decoration:none;">Upgrade to Pro — $29</a>
-    </div>
-    {% endif %}
-  </div>
-
-  {% if user.subscription_active %}
-  <!-- DEVICES (Pro only) -->
+  <!-- DEVICES -->
   <div class="dashboard-section">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
       <h2 style="margin:0;">YOUR DEVICES</h2>
-      <a href="/admin/devices/add" class="btn-primary" style="font-size:0.82rem; text-decoration:none; padding:0.4rem 0.9rem;">+ Add device</a>
+      <a href="/admin/devices/add" class="btn-primary" style="font-size:0.82rem;text-decoration:none;padding:0.4rem 0.9rem;">+ Add device</a>
     </div>
     {% if peers %}
     <div style="display:flex;flex-direction:column;gap:0.6rem;">
@@ -56,7 +25,7 @@
           <span style="width:8px;height:8px;border-radius:50%;background:var(--success);display:inline-block;flex-shrink:0;"></span>
           <span style="font-weight:600;font-size:0.9rem;">{{ peer.name }}</span>
         </div>
-        <div style="display:flex;gap:1.5rem;font-size:0.8rem;color:var(--text-muted);font-family:var(--mono, monospace);">
+        <div style="display:flex;gap:1.5rem;font-size:0.8rem;color:var(--text-muted);font-family:var(--mono,monospace);">
           <span>{{ peer.ip }}</span>
           <span>{{ peer.public_key[:16] }}...</span>
         </div>
@@ -65,14 +34,14 @@
     </div>
     {% else %}
     <div style="background:rgba(0,0,0,0.15);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;text-align:center;">
-      <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:0.75rem;">No devices connected yet.</p>
+      <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:0.5rem;">No devices connected yet.</p>
       <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1rem;">Add a device to get a WireGuard config and QR code you can scan.</p>
-      <a href="/admin/devices/add" class="btn-primary" style="text-decoration:none; font-size:0.85rem;">+ Add your first device</a>
+      <a href="/admin/devices/add" class="btn-primary" style="text-decoration:none;font-size:0.85rem;">+ Add your first device</a>
     </div>
     {% endif %}
   </div>
 
-  <!-- SETUP GUIDE (Pro only) -->
+  <!-- QUICK START -->
   <div class="dashboard-section">
     <h2>QUICK START</h2>
     <div style="display:flex;flex-direction:column;gap:0.75rem;">
@@ -82,38 +51,16 @@
       </div>
       <div style="display:flex;align-items:flex-start;gap:0.75rem;">
         <span style="background:var(--accent-subtle);color:var(--accent);font-size:0.75rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:12px;flex-shrink:0;">2</span>
-        <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">Install the <strong>WireGuard app</strong> on your device — free on <a href="https://apps.apple.com/app/wireguard/id1441195209" style="color:var(--accent);">iOS</a>, <a href="https://play.google.com/store/apps/details?id=com.wireguard.android" style="color:var(--accent);">Android</a>, <a href="https://apps.apple.com/app/wireguard/id1451685025" style="color:var(--accent);">macOS</a>, or <a href="https://www.wireguard.com/install/" style="color:var(--accent);">any platform</a>.</p>
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;">Install the <strong>WireGuard app</strong> — free on <a href="https://apps.apple.com/app/wireguard/id1441195209" style="color:var(--accent);">iOS</a>, <a href="https://play.google.com/store/apps/details?id=com.wireguard.android" style="color:var(--accent);">Android</a>, <a href="https://apps.apple.com/app/wireguard/id1451685025" style="color:var(--accent);">macOS</a>, or <a href="https://www.wireguard.com/install/" style="color:var(--accent);">any platform</a>.</p>
       </div>
       <div style="display:flex;align-items:flex-start;gap:0.75rem;">
         <span style="background:var(--accent-subtle);color:var(--accent);font-size:0.75rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:12px;flex-shrink:0;">3</span>
-        <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;"><strong>Scan the QR code</strong> or import the config file. Your device connects instantly — encrypted, private, on your network.</p>
+        <p style="font-size:0.88rem;color:var(--text-secondary);margin:0;"><strong>Scan the QR code</strong> or import the config file. Connected instantly — encrypted and private.</p>
       </div>
     </div>
   </div>
 
-  {% else %}
-  <!-- WHAT YOU GET (Free users) -->
-  <div class="dashboard-section">
-    <h2>WHAT PRO INCLUDES</h2>
-    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
-      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--text-secondary);">
-        <span style="color:var(--success);">✓</span> Add unlimited devices via web panel
-      </div>
-      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--text-secondary);">
-        <span style="color:var(--success);">✓</span> WireGuard configs + QR codes generated instantly
-      </div>
-      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--text-secondary);">
-        <span style="color:var(--success);">✓</span> Managed infrastructure — we handle the server
-      </div>
-      <div style="display:flex;align-items:center;gap:0.6rem;font-size:0.9rem;color:var(--text-secondary);">
-        <span style="color:var(--success);">✓</span> Lifetime access — one payment, no recurring fees
-      </div>
-    </div>
-    <a href="/checkout" class="btn-primary" style="text-decoration:none; font-size:0.9rem;">Upgrade to Pro — $29</a>
-  </div>
-  {% endif %}
-
-  <!-- QUICK LINKS -->
+  <!-- RESOURCES -->
   <div class="dashboard-section">
     <h2>RESOURCES</h2>
     <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">

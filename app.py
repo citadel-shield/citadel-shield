@@ -10,7 +10,6 @@ from master import master_required, track_visit, get_stats, MASTER_PASSWORD_HASH
 from master import master_required, track_visit, get_stats, MASTER_PASSWORD_HASH as MASTER_HASH
 from audit import log_action, get_audit_log
 from db import User, Session
-import stripe
 
 app = Flask(__name__)
 app.secret_key = "2297da3d2b92fd2a9b1460f94c60d622d9ef1f90d9abdf2850ce1a8546e5b928"
@@ -21,9 +20,6 @@ HEADSCALE_API_URL = "http://headscale:8080"
 HEADSCALE_API_KEY = os.environ.get("HEADSCALE_API_KEY", "")
 HEADSCALE_CONFIG_PATH = "/etc/citadel-config/config.yaml"
 
-stripe.api_key = os.environ.get("STRIPE_SECRET_KEY", "")
-STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
-STRIPE_WEBHOOK_SECRET = os.environ.get("STRIPE_WEBHOOK_SECRET", "")
 
 LOG_ENTRIES = [
     {"tag": "DEPLOYED", "tag_class": "ok", "title": "Stood up the coordination server",
@@ -219,95 +215,7 @@ def dashboard():
     from wireguard import list_peers as wg_list_peers
     peers = wg_list_peers()
     return render_template("dashboard.html", user=user, peers=peers,
-                           stripe_publishable_key=STRIPE_PUBLISHABLE_KEY)
-
-# ── Stripe ────────────────────────────────────────────────────────────────────
-
-@app.route("/pricing")
-def pricing():
-    return render_template("pricing.html")
-
-@app.route("/subscribe", methods=["POST"])
-@user_required
-def subscribe():
-    try:
-        db = Session()
-        user = db.query(User).filter_by(id=session["user_id"]).first()
-        if not user.stripe_customer_id:
-            customer = stripe.Customer.create(email=user.email)
-            user.stripe_customer_id = customer.id
-            db.commit()
-        checkout_session = stripe.checkout.Session.create(
-            customer=user.stripe_customer_id,
-            payment_method_types=["card"],
-            line_items=[{
-                "price_data": {
-                    "currency": "usd",
-                    "product_data": {"name": "Citadel Shield Pro"},
-                    "unit_amount": 2900,
-                    "recurring": {"interval": "month"}
-                },
-                "quantity": 1
-            }],
-            mode="subscription",
-            success_url="https://citadel-shield.com/dashboard?upgraded=1",
-            cancel_url="https://citadel-shield.com/pricing"
-        )
-        db.close()
-        return redirect(checkout_session.url, code=303)
-    except Exception as e:
-        return render_template("error.html", error=str(e))
-
-@app.route("/cancel-subscription", methods=["POST"])
-@user_required
-def cancel_subscription():
-    try:
-        db = Session()
-        user = db.query(User).filter_by(id=session["user_id"]).first()
-        if user.stripe_customer_id:
-            subs = stripe.Subscription.list(customer=user.stripe_customer_id, status="active")
-            for sub in subs.auto_paging_iter():
-                stripe.Subscription.modify(sub.id, cancel_at_period_end=True)
-        db.close()
-    except Exception as e:
-        pass
-    return redirect(url_for("dashboard"))
-
-@app.route("/webhook", methods=["POST"])
-def webhook():
-    payload = request.get_data(as_text=True)
-    sig_header = request.headers.get("Stripe-Signature")
-    try:
-        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
-    except Exception:
-        return jsonify({"status": "error"}), 400
-
-    if event["type"] in ("customer.subscription.created", "customer.subscription.updated"):
-        subscription = event["data"]["object"]
-        db = Session()
-        user = db.query(User).filter_by(stripe_customer_id=subscription["customer"]).first()
-        if user:
-            user.subscription_active = subscription["status"] == "active"
-            db.commit()
-        db.close()
-    elif event["type"] == "customer.subscription.deleted":
-        subscription = event["data"]["object"]
-        db = Session()
-        user = db.query(User).filter_by(stripe_customer_id=subscription["customer"]).first()
-        if user:
-            user.subscription_active = False
-            db.commit()
-        db.close()
-    elif event["type"] == "checkout.session.completed":
-        cs = event["data"]["object"]
-        db = Session()
-        user = db.query(User).filter_by(stripe_customer_id=cs.get("customer")).first()
-        if user:
-            user.subscription_active = True
-            db.commit()
-        db.close()
-
-    return jsonify({"status": "success"})
+)
 
 # ── Admin ─────────────────────────────────────────────────────────────────────
 
@@ -564,9 +472,13 @@ def master_dashboard():
     db_session = Session()
     users = db_session.query(User).all()
     user_count = len(users)
-    paid_count = len([u for u in users if u.subscription_active])
+    try:
+        from wireguard import list_peers as wg_list_peers
+        device_count = len(wg_list_peers())
+    except Exception:
+        device_count = 0
     db_session.close()
-    return render_template("master_dashboard.html", stats=stats, user_count=user_count, paid_count=paid_count)
+    return render_template("master_dashboard.html", stats=stats, user_count=user_count, device_count=device_count)
 
 @app.route("/cs-master/users")
 @master_required

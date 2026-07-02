@@ -21,9 +21,7 @@
       </div>
     </div>
     <div style="display:flex; gap:0.5rem;">
-      <form method="POST" action="{{ url_for('master_toggle_user', uid=user.id) }}">
         <button type="submit" style="background:transparent; border:1px solid var(--border); color:var(--accent); font-size:0.8rem; padding:0.3rem 0.7rem; border-radius:var(--radius); cursor:pointer;">
-          {% if user.subscription_active %}Downgrade{% else %}Upgrade{% endif %}
         </button>
       </form>
       <form method="POST" action="{{ url_for('master_delete_user', uid=user.id) }}" onsubmit="return confirm('Permanently delete {{ user.email }}?');">
